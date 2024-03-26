@@ -18,8 +18,8 @@ class Board:
 
 
     def put_piece_up(self, player , col):
-        if self.valid_col_vertical(col):
-            for i in range(ROW_COUNT):
+        if self.valid_col(col):
+            for i in range(0,ROW_COUNT):
                 if self.board[i][col] == 0:
                     self.board[i][col] = player
                     self.column_check[col] -= 1
@@ -28,8 +28,52 @@ class Board:
         else:
             print("Invalid move")
             return False
+
+
+    def put_piece_down(self, player , col):
+        if self.valid_col(col):
+            for i in range(ROW_COUNT-1, 0, -1):
+                if self.board[i][col] == 0:
+                    self.board[i][col] = player
+                    self.column_check[col] -= 1
+                    self.row_check[i] -= 1
+                    return True
+        else:
+            print("Invalid move")
+            return False
+
+    
+
+    def put_piece_left(self, player, row):
+        if self.valid_row(row):
+            for i in range(0, COL_COUNT-1):
+                if self.board[row][i] == 0:
+                    self.board[row][i] = player
+                    self.column_check [i] -= 1
+                    self.row_check[row] -= 1
+                    return True
+        else:
+            print("Invalid move")
+            return False
+
+    
+    def put_piece_right(self, player, row):
+        if self.valid_row(row):
+            for i in range(COL_COUNT -1, 0, -1):
+                if self.board[row][i] == 0:
+                    self.board[row][i] = player
+                    self.column_check [i] -= 1
+                    self.row_check[row] -= 1
+                    return True
+        else:
+            print("Invalid move")
+            return False
         
-    def valid_col_vertical(self, col):
+
+    
+        
+
+    def valid_col(self, col):
         if col >= COL_COUNT or col < 0:
             return False
         if self.column_check[col] < 0:
@@ -37,7 +81,7 @@ class Board:
         return True
 
 
-    def valid_col_horizontal(self, row):
+    def valid_row(self, row):
         if row >= ROW_COUNT or row < 0:
             return False
         if self.row_check[row] < 0:
@@ -74,26 +118,22 @@ class Board:
                 
         return False 
 
-    def is_full(self):
-        return (np.all(self.column_check < 0) or np.all(self.row_check < 0))
+    def isfull(self):
+        return (np.all(self.column_check < 0))
 
     def print_board(self):
         print(self.board)
 
 
 board = Board() 
-board.put_piece_up(1,2)
-board.put_piece_up(1,0)
-board.put_piece_up(1,1)
-board.put_piece_up(1,3)
-board.put_piece_up(1,4)
-board.put_piece_up(1,5)
-board.put_piece_up(1,6)
-board.put_piece_up(1,7)
-board.put_piece_up(1,0)
+
+
 
 
 
 board.print_board()
 print(board.column_check)
 print(board.row_check)
+print(board.isfull())
+print(board.win(1))
+print(board.win(2))
