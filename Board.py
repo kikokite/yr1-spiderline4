@@ -127,7 +127,17 @@ class Board:
 
 board = Board() 
 
-
+board.put_piece_up(1,3)
+board.put_piece_up(1,3)
+board.put_piece_up(1,3)
+board.put_piece_up(1,3)
+board.put_piece_left(1,3)
+board.put_piece_left(1,3)
+board.put_piece_left(1,3)
+board.put_piece_left(1,3)
+board.put_piece_left(1,3)
+board.put_piece_right(1,3)
+board.put_piece_right(1,3)
 
 
 
