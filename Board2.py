@@ -27,26 +27,28 @@ class Board:
     
     
     def valid_move(self,row,col):
+        j=0
         if self.board[row][col]==0:    
             if row==0 or row==ROW_COUNT-1: return True
             if col==0 or col==COL_COUNT-1: return True
             for i in range(col):  #verificar as peças à esquerda
                 if self.board[row][i]==0:
+                    j+=1
                     break
-                return True
             for i in range(col+1,COL_COUNT):  #verificar as peças à direita
                 if self.board[row][i]==0:
+                    j+=1
                     break
-                return True
             for i in range(row):  #verificar as peças acima
                 if self.board[i][col]==0:
+                    j+=1
                     break
-                return True
             for i in range(row+1,ROW_COUNT):  #verificar as peças abaixo
                 if self.board[i][col]==0:
+                    j+=1
                     break
-                return True
-        return False
+        if j==4: return False
+        return True
 
 
     def win(self):
