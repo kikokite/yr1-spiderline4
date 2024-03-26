@@ -13,11 +13,10 @@ class Board:
     
     def __init__(self):
         self.board= np.zeros((ROW_COUNT,COL_COUNT))
-        self.game_over=False
         self.player=1
     
     
-    def put_piece(self,row,col):     #    0 <= row <= ROW_COUNT-1   0 <= col <= COL_COUNT-1
+    def put_piece(self,row,col):     #    0<=row<=ROW_COUNT-1   0<=col<=COL_COUNT-1
         if self.valid_move(row,col):
             self.board[row][col]= self.player
             print(self.board)    
@@ -28,26 +27,25 @@ class Board:
     
     
     def valid_move(self,row,col):
-        if row==0 or row==ROW_COUNT-1:
-            if self.board[row][col]==0: return True
-        if col==0 or col==COL_COUNT-1:
-            if self.board[row][col]==0: return True
-        for i in range(col):  #verificar as peças à esquerda
-            if self.board[row][i]==0:
-                break
-            return True
-        for i in range(col+1,COL_COUNT):  #verificar as peças à direita
-            if self.board[row][i]==0:
-                break
-            return True
-        for i in range(row):  #verificar as peças acima
-            if self.board[i][col]==0:
-                break
-            return True
-        for i in range(row+1,ROW_COUNT):  #verificar as peças abaixo
-            if self.board[i][col]==0:
-                break
-            return True
+        if self.board[row][col]==0:    
+            if row==0 or row==ROW_COUNT-1: return True
+            if col==0 or col==COL_COUNT-1: return True
+            for i in range(col):  #verificar as peças à esquerda
+                if self.board[row][i]==0:
+                    break
+                return True
+            for i in range(col+1,COL_COUNT):  #verificar as peças à direita
+                if self.board[row][i]==0:
+                    break
+                return True
+            for i in range(row):  #verificar as peças acima
+                if self.board[i][col]==0:
+                    break
+                return True
+            for i in range(row+1,ROW_COUNT):  #verificar as peças abaixo
+                if self.board[i][col]==0:
+                    break
+                return True
         return False
 
 
@@ -80,14 +78,12 @@ class Board:
     
 board=Board()
 print(board.board)
-print("Jogadas no formato: linha coluna (em que 0<=linha<= ROW_COUNT-1 e 0<=coluna<=COL_COUNT-1)")
+print("Jogadas no formato: linha coluna (em que 0<=linha<=ROW_COUNT-1 e 0<=coluna<=COL_COUNT-1)")
 while True:
     print("Vez do jogador", board.player)
     a,b=map(int,input().split())
-    c=board.put_piece(a,b)
-    while c==False:
+    while board.put_piece(a,b)==False:
         a,b=map(int,input().split())
-        c=board.put_piece(a,b)
     if board.win():
         print("Vitória do jogador", board.player)
         break
