@@ -14,15 +14,16 @@ class Board:
     def __init__(self):
         self.board= np.zeros((ROW_COUNT,COL_COUNT))
         self.player=1
+        self.acts=[]
     
     
     def put_piece(self,row,col):     #    0<=row<=ROW_COUNT-1   0<=col<=COL_COUNT-1
         if self.valid_move(row,col):
             self.board[row][col]= self.player
-            print(self.board)    
+            #print(self.board)    
             return True
-        else:
-            print("Invalid move!")
+        #else:
+            #print("Invalid move!")
         return False
     
     
@@ -47,8 +48,19 @@ class Board:
                 if self.board[i][col]==0:
                     j+=1
                     break
+        else: return False
         if j==4: return False
         return True
+    
+
+    def actions(self): #função que atualiza a lista com todos os movimentos possíveis num determinado momento do jogo
+        self.acts=[]
+        for i in range (ROW_COUNT):
+            for j in range (COL_COUNT):
+                if self.valid_move(i,j):
+                    self.acts.append([i,j])
+        return self.acts
+
 
 
     def win(self):
@@ -78,20 +90,23 @@ class Board:
                     return False
         return True
     
-board=Board()
-print(board.board)
-print("Jogadas no formato: linha coluna (em que 0<=linha<=ROW_COUNT-1 e 0<=coluna<=COL_COUNT-1)")
-while True:
-    print("Vez do jogador", board.player)
-    a,b=map(int,input().split())
-    while board.put_piece(a,b)==False:
-        a,b=map(int,input().split())
-    if board.win():
-        print("Vitória do jogador", board.player)
-        break
-    if board.is_full():
-        print("Empate")
-        break
-    if board.player==1: board.player=2
-    else:
-        board.player=1
+
+#board=Board()
+#print(board.board)
+#print("Jogadas no formato: linha coluna (em que 0<=linha<=ROW_COUNT-1 e 0<=coluna<=COL_COUNT-1)")
+#while True:
+#    board.actions()
+#    print(board.acts)
+#    print("Vez do jogador", board.player)
+#    a,b=map(int,input().split())
+#    while board.put_piece(a,b)==False:
+#        a,b=map(int,input().split())
+#    if board.win():
+#        print("Vitória do jogador", board.player)
+#        break
+#    if board.is_full():
+#        print("Empate")
+#        break
+#    if board.player==1: board.player=2
+#    else:
+#        board.player=1
