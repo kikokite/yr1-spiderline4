@@ -286,7 +286,7 @@ def main(mode):
                                 print("The game is a draw!")
                                 board.game_over = True
                                 break
-
+                            board.turn = 1 - board.turn
                             print("Array after click:\n", board.board)
 
 
