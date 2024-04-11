@@ -158,4 +158,4 @@ def eval(board,player1,player2,ROW_COUNT,COL_COUNT): #função que permite avali
     return score     
 
 
-#def Minimax(board,step,player,ROW_COUNT): #COL_COUNT=ROW_COUNT
+#def Minimax(board,depth,player,ROW_COUNT): #COL_COUNT=ROW_COUNT
