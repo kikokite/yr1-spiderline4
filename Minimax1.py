@@ -167,7 +167,7 @@ class Heuristic():
             return total_score
     
 
-def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT):
+def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT,player_1,player_2):
     if depth==0 or board.win(player_1) or board.win(player_2) or board.isfull():
         return Heuristic.final_heuristic(board,player_1,player_2,ROW_COUNT,COL_COUNT),-1,-1
     
