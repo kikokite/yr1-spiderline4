@@ -3,6 +3,8 @@ import sys
 import numpy as np
 import random
 
+from minimax import * 
+
 # Constants
 WINDOW_WIDTH, WINDOW_HEIGHT = 700, 700
 CELL_SIZE = 70  # Adjusted for visual purposes
@@ -241,6 +243,34 @@ def display_board_size_menu():
                     if rect.collidepoint(mouse_x, mouse_y):
                         return size
 
+def display_difficulty_menu(message):
+    font = pygame.font.Font(None, 36)
+    title = font.render(message, True, BLACK)
+    difficulties = ["Easy", "Medium (Minimax)", "Medium (Negamax)", "Hardcore"]
+    difficulty_texts = [font.render(difficulty, True, BLACK) for difficulty in difficulties]
+
+    title_rect = title.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 4))
+    difficulty_rects = [text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60 * i)) for i, text in enumerate(difficulty_texts)]
+
+    screen.fill(GRAY)
+    screen.blit(title, title_rect)
+    for text, rect in zip(difficulty_texts, difficulty_rects):
+        pygame.draw.rect(screen, BLACK, rect.inflate(30, 15), 2)
+        screen.blit(text, rect)
+
+    pygame.display.flip()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                for difficulty, rect in zip(difficulties, difficulty_rects):
+                    if rect.collidepoint(mouse_x, mouse_y):
+                        return difficulty.lower().replace(" ", "_")
+
 
 def main(mode):
     if mode == "pvp":
@@ -286,6 +316,7 @@ def main(mode):
                                 print("The game is a draw!")
                                 board.game_over = True
                                 break
+
                             board.turn = 1 - board.turn
                             print("Array after click:\n", board.board)
 
@@ -296,20 +327,107 @@ def main(mode):
 
 
     elif mode == "pvc":
-            print ("Not yet implemented")
-            pygame.quit()
-            sys.exit()
+        board_size = display_board_size_menu()
+        row_count, col_count = board_size, board_size
 
-            #Your code here 
+        board = Board(row_count, col_count)
+        hovered_cell = None
+
+        difficulty = display_difficulty_menu("Choose Difficulty")
+
+        while not board.game_over:
+            draw_board(board, hovered_cell)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if board.turn == 0:
+                    if event.type == pygame.MOUSEMOTION:
+                        mouse_x, mouse_y = pygame.mouse.get_pos()
+                        col = (mouse_x - (WINDOW_WIDTH - board.col_count * CELL_SIZE) // 2) // CELL_SIZE
+                        row = (mouse_y - (WINDOW_HEIGHT - board.row_count * CELL_SIZE) // 2) // CELL_SIZE
+                        if 0 <= row < board.row_count and 0 <= col < board.col_count:
+                            if [row, col] in board.actions():
+                                hovered_cell = [row, col]
+                            else:
+                                hovered_cell = None
+                        else:
+                            hovered_cell = None
+
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if board.turn == 0:
+                            mouse_x, mouse_y = pygame.mouse.get_pos()
+                            col = (mouse_x - (WINDOW_WIDTH - board.col_count * CELL_SIZE) // 2) // CELL_SIZE
+                            row = (mouse_y - (WINDOW_HEIGHT - board.row_count * CELL_SIZE) // 2) // CELL_SIZE
+
+                            if [row, col] in board.actions():
+                                board.put_piece(board.turn + 1, row, col)
+
+                                if board.win(board.turn + 1):
+                                    print(f"Player {board.turn + 1} wins!")
+                                    board.game_over = True
+
+                                if board.is_full():
+                                    print("The game is a draw!")
+                                    board.game_over = True
+                                    break
+
+                                board.turn = 1 - board.turn
+                                print("Array after click:\n", board.board)
+                    
+                # CPU's turn
+                else:
+
+                    # Define player_1 and player_2 for clarity
+                    player_1 = 1
+                    player_2 = 2
+                    current_player = board.turn + 1  # This adjusts the player number correctly for the Minimax call
+
+                    if difficulty == "easy":
+                        row, col = random.choice(board.actions())
+                    elif difficulty == "medium_minimax":
+                        _,row,col = minimax(board, 5, current_player, row_count, col_count, player_1,player_2)
+                        pass
+                    elif difficulty == "medium_negamax":
+                        # Implement medium difficulty with Negamax
+                        pass
+                    elif difficulty == "hardcore":
+                        # Implement hardcore difficulty
+                        pass
+
+                    board.put_piece(board.turn + 1, row, col)
+
+                    if board.win(board.turn + 1):
+                        print(f"Player {board.turn + 1} wins!")
+                        board.game_over = True
+
+                    if board.is_full():
+                        print("The game is a draw!")
+                        board.game_over = True
+                        break
+
+                    board.turn = 1 - board.turn
+                    print("Array after CPU's move:\n", board.board)
+
+        draw_board(board, None)
+        pygame.time.wait(3000)
+        pygame.quit() 
 
 
 
     elif mode == "cvc":
-            print ("Not yet implemented")
-            pygame.quit()
-            sys.exit()
+        board_size = display_board_size_menu()
+        row_count, col_count = board_size, board_size
 
-            #Your code here
+        board = Board(row_count, col_count)
+        hovered_cell = None
+
+        difficulty1 = display_difficulty_menu("Choose Difficulty for the 1st algorithm")
+        difficulty2 = display_difficulty_menu("Choose Difficulty for 2nd algorithm")
+
+    # Implement CPU vs. CPU logic based on chosen difficulties
 
     
 
