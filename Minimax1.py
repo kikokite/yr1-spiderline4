@@ -2,19 +2,18 @@ import copy
 import random 
 import numpy as np
 
-from carqueija_update import *
-
+from Jogo1 import *
 
 class Heuristic():
 
     def score_change(self,c1,c2):
         if c2==0:
-            if c1==4: return 10000
+            if c1==4: return 15000
             elif c1==3: return 100
             elif c1==2: return 10
             elif c1==1: return 1
         if c1==0:
-            if c2==4: return -10000
+            if c2==4: return -15000
             elif c2==3: return -100
             elif c2==2: return -10
             elif c2==1: return -1 
@@ -51,7 +50,7 @@ class Heuristic():
                     [7, 9, 11, 12, 12, 11, 9, 7],
                     [5, 8, 10, 11, 11, 10, 8, 5],
                     [4, 6, 8, 9, 9, 8, 6, 4],
-                    [3, 4, 5, 7, 7, 5, 4, 3],           
+                    [3, 4, 5, 7, 7, 5, 4, 3]           
                 ])
 
         elif ROW_COUNT==9:
@@ -60,11 +59,11 @@ class Heuristic():
                     [4, 6, 8, 10, 12, 10, 8, 6, 4],
                     [5, 8, 11, 13, 14, 13, 11, 8, 5],
                     [7, 10, 13, 15, 16, 15, 13, 10, 7],
-                    [9, 12, 14, 16, 17, 16, 14, 12, 9]
+                    [9, 12, 14, 16, 17, 16, 14, 12, 9],
                     [7, 10, 13, 15, 16, 15, 13, 10, 7],
                     [5, 8, 11, 13, 14, 13, 11, 8, 5],
                     [4, 6, 8, 10, 12, 10, 8, 6, 4],
-                    [3, 4, 5, 7, 9, 7, 5, 4, 3],          
+                    [3, 4, 5, 7, 9, 7, 5, 4, 3]          
                 ])
 
         elif ROW_COUNT==10:
@@ -73,19 +72,19 @@ class Heuristic():
                     [4, 6, 8, 10, 12, 12, 10, 8, 6, 4],
                     [5, 8, 11, 13, 14, 14, 13, 11, 8, 5],
                     [7, 10, 13, 15, 16, 16, 15, 13, 10, 7],
-                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9]
-                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9]
+                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9],
+                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9],
                     [7, 10, 13, 15, 16, 16, 15, 13, 10, 7],
                     [5, 8, 11, 13, 14, 14, 13, 11, 8, 5],
                     [4, 6, 8, 10, 12, 12, 10, 8, 6, 4],
-                    [3, 4, 5, 7, 9, 9, 7, 5, 4, 3],          
+                    [3, 4, 5, 7, 9, 9, 7, 5, 4, 3]          
                 ])
         
         score = 0
         for r in range (ROW_COUNT):
             for c in range (COL_COUNT):
-                if board[r][c]==player_1: score+=board_score_matrix[r][c]
-                elif board[r][c]==player_2: score-=board_score_matrix[r][c]
+                if board.board[r][c]==player_1: score+=board_score_matrix[r][c]
+                elif board.board[r][c]==player_2: score-=board_score_matrix[r][c]
 
         return score
 
@@ -167,9 +166,10 @@ class Heuristic():
             return total_score
     
 
-def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT,player_1,player_2):
-    if depth==0 or board.win(player_1) or board.win(player_2) or board.isfull():
-        return Heuristic.final_heuristic(board,player_1,player_2,ROW_COUNT,COL_COUNT),-1,-1
+def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT):
+    if depth==0 or board.win(1) or board.win(2) or board.is_full():
+        heuristic=Heuristic()
+        return heuristic.final_heuristic(board,1,2,ROW_COUNT,COL_COUNT),-1,-1
     
     #player2 = max
     if MaximizingPlayer:
@@ -178,9 +178,9 @@ def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT,player_1,player_2):
         best_col=None
         for r in range(ROW_COUNT):
             for c in range(COL_COUNT):
-                if [r,c] in board.curr_actions:
+                if [r,c] in board.actions():
                     new_board=copy.deepcopy(board)
-                    new_board.put_piece(2,r,c)
+                    new_board.put_piece(1,r,c)
                     eval,_,_=Minimax(new_board,depth-1,False,ROW_COUNT,COL_COUNT)
                     if eval>max_eval:
                         best_row=r
@@ -195,9 +195,9 @@ def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT,player_1,player_2):
         best_col=None
         for r in range(ROW_COUNT):
             for c in range(COL_COUNT):
-                if [r,c] in board.curr_actions:
+                if [r,c] in board.actions():
                     new_board=copy.deepcopy(board)
-                    new_board.put_piece(2,r,c)
+                    new_board.put_piece(1,r,c)
                     eval,_,_=Minimax(new_board,depth-1,True,ROW_COUNT,COL_COUNT)
                     if eval<min_eval:
                         best_row=r
@@ -205,4 +205,3 @@ def Minimax(board,depth,MaximizingPlayer,ROW_COUNT,COL_COUNT,player_1,player_2):
                         min_eval=eval
         
         return min_eval,best_row,best_col
-    
