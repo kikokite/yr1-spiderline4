@@ -3,7 +3,8 @@ import sys
 import numpy as np
 import random
 
-from minimax import * 
+from minimax import *
+from montecarlo import * 
 
 # Constants
 WINDOW_WIDTH, WINDOW_HEIGHT = 700, 700
@@ -386,14 +387,15 @@ def main(mode):
                     current_player = board.turn + 1  # This adjusts the player number correctly for the Minimax call
 
                     if difficulty == "easy":
-                        row, col = random.choice(board.actions())
+                        _,row,col = minimax(board, 1, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
                     elif difficulty == "medium_(minimax)":
                         _,row,col = minimax(board, 3, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
                     elif difficulty == "medium_(negamax)":
                         # Implement medium difficulty with Negamax
                         pass
                     elif difficulty == "hardcore":
-                        # Implement hardcore difficulty
+                        c = 1.4
+                        row, col = monte_carlo_tree_search(board, current_player,c, 10000, row_count, col_count)
                         pass
 
                     board.put_piece(board.turn + 1, row, col)
@@ -426,8 +428,82 @@ def main(mode):
         difficulty1 = display_difficulty_menu("Choose Difficulty for the 1st algorithm")
         difficulty2 = display_difficulty_menu("Choose Difficulty for 2nd algorithm")
 
-    # Implement CPU vs. CPU logic based on chosen difficulties
 
+        while not board.game_over:
+
+            draw_board(board, None)
+            pygame.time.wait(2000)
+            
+
+            if board.turn == 0:
+                # Define player_1 and player_2 for clarity
+                player_1 = 1
+                player_2 = 2
+                current_player = board.turn + 1  # This adjusts the player number correctly for the Minimax call
+
+                if difficulty1 == "easy":
+                    row,col = random.choice(board.actions())
+                elif difficulty1 == "medium_(minimax)":
+                    _,row,col = minimax(board, 3, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
+                elif difficulty1 == "medium_(negamax)":
+                    # Implement medium difficulty with Negamax
+                    pass
+                elif difficulty1 == "hardcore":
+                    c = 1.4
+                    row, col = monte_carlo_tree_search(board, current_player,c, 10000, row_count, col_count)
+                    pass
+
+                board.put_piece(board.turn + 1, row, col)
+
+                if board.win(board.turn + 1):
+                    print(f"Player {board.turn + 1} wins!")
+                    board.game_over = True
+
+                if board.is_full():
+                    print("The game is a draw!")
+                    board.game_over = True
+                    break
+
+                board.turn = 1 - board.turn
+                print("Array after CPU's move:\n", board.board)
+
+
+            else:
+
+                # Define player_1 and player_2 for clarity
+                player_1 = 1
+                player_2 = 2
+                current_player = board.turn + 1  # This adjusts the player number correctly for the Minimax call
+
+                if difficulty2 == "easy":
+                    row,col = random.choice(board.actions())
+                elif difficulty2 == "medium_(minimax)":
+                    _,row,col = minimax(board, 3, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
+                elif difficulty2 == "medium_(negamax)":
+                    # Implement medium difficulty with Negamax
+                    pass
+                elif difficulty2 == "hardcore":
+                    c = 1.4
+                    row, col = monte_carlo_tree_search(board, current_player,c, 10000, row_count, col_count)
+                    pass
+
+                board.put_piece(board.turn + 1, row, col)
+
+                if board.win(board.turn + 1):
+                    print(f"Player {board.turn + 1} wins!")
+                    board.game_over = True
+
+                if board.is_full():
+                    print("The game is a draw!")
+                    board.game_over = True
+                    break
+
+                board.turn = 1 - board.turn
+                print("Array after CPU's move:\n", board.board)
+
+        draw_board(board, None)
+        pygame.time.wait(3000)
+        pygame.quit() 
     
 
 if __name__ == "__main__":
