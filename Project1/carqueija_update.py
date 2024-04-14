@@ -39,6 +39,10 @@ class Board:
         else:
             print("Invalid move!")
             return False
+    
+    def remove_piece(self,player,row,col):
+        if self.board[row][col] == player:
+            self.board[row][col] = 0
 
     def valid_move(self, row, col):
         check_sides = 0
@@ -386,12 +390,11 @@ def main(mode):
                     current_player = board.turn + 1  # This adjusts the player number correctly for the Minimax call
 
                     if difficulty == "easy":
-                        row, col = random.choice(board.actions())
+                        _,row,col = minimax(board, 2, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
                     elif difficulty == "medium_(minimax)":
                         _,row,col = minimax(board, 4, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
                     elif difficulty == "medium_(negamax)":
-                        # Implement medium difficulty with Negamax
-                        pass
+                        _,row,col= negamax(board, 4, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
                     elif difficulty == "hardcore":
                         # Implement hardcore difficulty
                         pass

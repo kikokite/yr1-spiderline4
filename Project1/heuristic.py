@@ -8,12 +8,12 @@ class Heuristic():
     def score_change(self,c1,c2):
         if c2==0:
             if c1==4: return -80000
-            elif c1==3: return -500
+            elif c1==3: return -5000
             elif c1==2: return -100
             elif c1==1: return -10
         if c1==0:
             if c2==4: return 80000
-            elif c2==3: return 500
+            elif c2==3: return 5000
             elif c2==2: return 100
             elif c2==1: return 10 
         return 0
