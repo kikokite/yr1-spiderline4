@@ -7,15 +7,15 @@ class Heuristic():
 
     def score_change(self,c1,c2):
         if c2==0:
-            if c1==4: return 10000
-            elif c1==3: return 100
-            elif c1==2: return 10
-            elif c1==1: return 1
+            if c1==4: return -80000
+            elif c1==3: return -500
+            elif c1==2: return -100
+            elif c1==1: return -10
         if c1==0:
-            if c2==4: return -10000
-            elif c2==3: return -100
-            elif c2==2: return -10
-            elif c2==1: return -1 
+            if c2==4: return 100000
+            elif c2==3: return 500
+            elif c2==2: return 100
+            elif c2==1: return 10 
         return 0
 
     def hot_pos(self,board,player_1,player_2,ROW_COUNT,COL_COUNT):
@@ -49,7 +49,7 @@ class Heuristic():
                     [7, 9, 11, 12, 12, 11, 9, 7],
                     [5, 8, 10, 11, 11, 10, 8, 5],
                     [4, 6, 8, 9, 9, 8, 6, 4],
-                    [3, 4, 5, 7, 7, 5, 4, 3],           
+                    [3, 4, 5, 7, 7, 5, 4, 3]          
                 ])
 
         elif ROW_COUNT==9:
@@ -58,11 +58,11 @@ class Heuristic():
                     [4, 6, 8, 10, 12, 10, 8, 6, 4],
                     [5, 8, 11, 13, 14, 13, 11, 8, 5],
                     [7, 10, 13, 15, 16, 15, 13, 10, 7],
-                    [9, 12, 14, 16, 17, 16, 14, 12, 9]
+                    [9, 12, 14, 16, 17, 16, 14, 12, 9],
                     [7, 10, 13, 15, 16, 15, 13, 10, 7],
                     [5, 8, 11, 13, 14, 13, 11, 8, 5],
                     [4, 6, 8, 10, 12, 10, 8, 6, 4],
-                    [3, 4, 5, 7, 9, 7, 5, 4, 3],          
+                    [3, 4, 5, 7, 9, 7, 5, 4, 3]          
                 ])
 
         elif ROW_COUNT==10:
@@ -71,19 +71,19 @@ class Heuristic():
                     [4, 6, 8, 10, 12, 12, 10, 8, 6, 4],
                     [5, 8, 11, 13, 14, 14, 13, 11, 8, 5],
                     [7, 10, 13, 15, 16, 16, 15, 13, 10, 7],
-                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9]
-                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9]
+                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9],
+                    [9, 12, 14, 16, 17, 17, 16, 14, 12, 9],
                     [7, 10, 13, 15, 16, 16, 15, 13, 10, 7],
                     [5, 8, 11, 13, 14, 14, 13, 11, 8, 5],
                     [4, 6, 8, 10, 12, 12, 10, 8, 6, 4],
-                    [3, 4, 5, 7, 9, 9, 7, 5, 4, 3],          
+                    [3, 4, 5, 7, 9, 9, 7, 5, 4, 3]          
                 ])
         
         score = 0
         for r in range (ROW_COUNT):
             for c in range (COL_COUNT):
-                if board[r][c]==player_1: score+=board_score_matrix[r][c]
-                elif board[r][c]==player_2: score-=board_score_matrix[r][c]
+                if board.board[r][c]==player_1: score-=board_score_matrix[r][c]
+                elif board.board[r][c]==player_2: score+=board_score_matrix[r][c]
 
         return score
 

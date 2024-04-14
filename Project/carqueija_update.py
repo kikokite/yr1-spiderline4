@@ -387,10 +387,9 @@ def main(mode):
 
                     if difficulty == "easy":
                         row, col = random.choice(board.actions())
-                    elif difficulty == "medium_minimax":
-                        _,row,col = minimax(board, 5, current_player, row_count, col_count, player_1,player_2)
-                        pass
-                    elif difficulty == "medium_negamax":
+                    elif difficulty == "medium_(minimax)":
+                        _,row,col = minimax(board, 3, current_player, row_count, col_count, player_1,player_2,alpha=float('-inf'),beta=float('inf'))
+                    elif difficulty == "medium_(negamax)":
                         # Implement medium difficulty with Negamax
                         pass
                     elif difficulty == "hardcore":
