@@ -43,8 +43,7 @@ Clone the repository and install the dependencies:
 git clone https://github.com/<your-username>/Spider-Line-4.git
 cd Spider-Line-4
 pip install -r requirements.txt
-
-
+```
 
 ## Bibliography
 - https://www.youtube.com/watch?v=l-hh51ncgDI
